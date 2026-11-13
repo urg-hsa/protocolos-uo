@@ -8631,11 +8631,12 @@ var ALL=[
  {t:'Pasa de una pestaña a otra con <b>las flechas</b> de abajo. Al cambiar de protocolo, las casillas se reinician.',barTop:1,pre:function(){closeSb();window.scrollTo(0,0);},tap:'next',el:function(){return $('#pagerNext')&&vis($('#pagerNext'))?$('#pagerNext').parentElement:null;}},
  {t:'<b>Marca los criterios</b> que cumple el paciente. “Seleccionar todo” marca la lista entera.',pre:function(){closeSb();goTo('.status-banner-criteria');},tap:'check',el:function(){return activeSel('ul.checklist');}},
  {t:'Este aviso cambia de color según lo marcado: <b>verde</b> cumple, <b>rojo</b> excluye, <b>ámbar</b> intermedio.',pre:function(){closeSb();},el:function(){return activeSel('.status-banner');}},
- {t:'<b>📝 Generar comentario</b> redacta un texto para la historia clínica con lo que has marcado. Revísalo y pulsa <b>“Copiar texto”</b>. <i>(En pruebas: dolor torácico, FA, asma, EPOC y neumonía.)</i>',pre:function(){closeSb();goTo('.gen-comment-btn');},tap:1,el:function(){return activeSel('.gen-comment-btn');}},
+ {t:'<b>📝 Generar comentario</b> redacta un texto para la historia clínica con lo que has marcado. Revísalo y pulsa <b>“Copiar texto”</b>. <i>En prueba, solo disponible en: dolor torácico, fibrilación auricular, agudización asmática, agudización de EPOC y neumonía.</i>',pre:function(){closeSb();goTo('.gen-comment-btn');},tap:1,el:function(){return activeSel('.gen-comment-btn');}},
  {t:'En las <b>calculadoras y escalas</b> (EDACS, CHA₂DS₂-VA, HAS-BLED, NEWS2, DECAF…) responde a cada ítem: la <b>puntuación y su interpretación</b> se calculan solas.',pre:function(){closeSb();goTo('#scorePanel');window.scrollTo(0,0);},tapSel:'#edadCdd .cdd-btn',el:function(){var a=activeSel('.score-panel'),b=activeSel('.edacs-item');return a&&b?[a,b]:(a||b);}},
- {t:'Si lo necesitas, <b>puedes imprimir o generar un PDF</b> con lo que has marcado.',pre:function(){closeSb();goTo('.print-summary-btn');},tap:1,el:function(){return activeSel('.print-summary-btn')||$('.section.active h1');}},
  {mob:1,t:'<b>Toca las tablas</b> para verlas ampliadas a pantalla completa.',pre:function(){closeSb();goTo('.table-tap-hint');},tap:1,el:function(){var h=activeSel('.table-tap-hint');return h?h.parentElement:null;}},
+ {t:'Si lo necesitas, <b>puedes imprimir o generar un PDF</b> con lo que has marcado.',pre:function(){closeSb();goTo('.print-summary-btn');},tap:1,el:function(){return activeSel('.print-summary-btn')||$('.section.active h1');}},
  {t:'En <b>“Consultar PDF”</b> está el documento original completo del protocolo.',pre:function(){openSb();},tap:1,el:function(){var b=document.querySelector('button[data-protocol="'+P+'"][data-section^="pdf"]');return b;}},
+ {inst:1,t:'Recuerda: puedes <b>instalarla como app</b> en el móvil o el ordenador con <b>“📲 Instalar app”</b>, en la pantalla de inicio. Se abre como una aplicación más y funciona <b>sin conexión</b>.',pre:function(){closeSb();var h=$('#backToWelcome');if($('#shell').style.display!=='none'&&h)h.click();window.scrollTo(0,0);},tap:1,el:function(){var b=$('#installOpenBtn');return b&&vis(b)?b:null;}},
 ];
 function draw(r,y,th,pad){
  var W=innerWidth,tw=txt.offsetWidth,tl=(W-tw)/2,below=y>r.top;
@@ -8678,7 +8679,7 @@ function show(){
  },i===0?0:260);
 }
 var steps=ALL;
-function start(){steps=ALL.filter(function(x){return !x.mob||MOB();});i=0;L.classList.add('on');try{localStorage.setItem('uoGuideSeen','1');}catch(x){}show();}
+function start(){var SA=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;steps=ALL.filter(function(x){return (!x.mob||MOB())&&!(x.inst&&SA);});i=0;L.classList.add('on');try{localStorage.setItem('uoGuideSeen','1');}catch(x){}show();}
 function prev(){if(i>0){i--;show();}}
 function end(){L.classList.remove('on');ar.innerHTML='';tp.classList.remove('on');closeSb();var h=$('#backToWelcome');if($('#shell').style.display!=='none'&&h)h.click();window.scrollTo(0,0);}
 L.addEventListener('click',function(e){e.stopPropagation();});btn.addEventListener('click',start);sk.addEventListener('click',end);
