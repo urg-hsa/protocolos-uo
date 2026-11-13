@@ -4,7 +4,7 @@ Web app (PWA) de un solo archivo con los protocolos de la Unidad de Observación
 
 ## Direcciones
 - **Principal:** https://urg-hsa.github.io/protocolos-uo/ (este repositorio, `urg-hsa/protocolos-uo`, rama `main`, GitHub Pages desde la raíz).
-- **Antigua:** https://infanteeric03-spec.github.io/protocolos-uo/ (repo `infanteeric03-spec/protocolos-uo`). Solo muestra un aviso rojo de cambio de dirección; ese aviso aparece únicamente cuando `location.hostname === 'infanteeric03-spec.github.io'`. No hace falta seguir publicando allí salvo que el usuario lo pida.
+- **Antigua:** https://infanteeric03-spec.github.io/protocolos-uo/ (repo `infanteeric03-spec/protocolos-uo`). Muestra un aviso rojo («Este enlace dejará de estar disponible…») con cuenta atrás de 3 s y redirige sola a la nueva (conserva `?` y `#`); solo ocurre cuando `location.hostname === 'infanteeric03-spec.github.io'`. Para que surta efecto, ese `index.html` tiene que estar publicado también en el repo antiguo (no se puede añadir a la misma sesión que este porque se llama igual).
 
 ## Estructura
 - `index.html` (~0,8 MB): toda la app (HTML + CSS + JS). Es el único archivo que se edita normalmente.
@@ -35,4 +35,4 @@ Web app (PWA) de un solo archivo con los protocolos de la Unidad de Observación
 
 ## Pendiente / ideas
 - Extender «Generar comentario» al resto de protocolos (y a las pestañas de alta/ingreso) cuando el usuario lo pida.
-- Retirar la dirección antigua (redirección automática) cuando el usuario confirme que todos tienen el enlace nuevo.
+- Más adelante: dejar en el repo antiguo solo una página mínima de redirección.

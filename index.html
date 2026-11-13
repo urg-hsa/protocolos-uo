@@ -877,7 +877,7 @@
   .install-panel ol{margin:0; padding-left:22px;} .install-panel li{margin:0 0 8px; line-height:1.45;}
   .install-note{font-size:12.5px; color:var(--ink-soft); margin:8px 0 0;}
   @media print{.install-open-btn{display:none !important;}}
-  .move-notice{position:fixed; left:0; right:0; top:0; z-index:9000; display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; padding:10px 44px 10px 16px; padding-top:calc(10px + env(safe-area-inset-top)); background:#B7472A; color:#fff; font-size:14px; line-height:1.4; text-align:center; box-shadow:0 4px 14px rgba(0,0,0,.25);}
+  .move-notice{position:fixed; left:0; right:0; top:0; z-index:9000; display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; padding:10px 16px; padding-top:calc(10px + env(safe-area-inset-top)); background:#B7472A; color:#fff; font-size:14px; line-height:1.4; text-align:center; box-shadow:0 4px 14px rgba(0,0,0,.25);}
   .move-notice a.mn-go{background:#fff; color:#8a2f17; font-weight:700; text-decoration:none; padding:6px 14px; border-radius:999px; white-space:nowrap;}
   .move-notice .mn-x{position:absolute; right:8px; top:50%; transform:translateY(-50%); background:transparent; border:0; color:#fff; font-size:22px; line-height:1; cursor:pointer; padding:6px;}
   .move-notice small{display:block; width:100%; opacity:.9; font-size:12.5px;}
@@ -8758,20 +8758,20 @@ window.addEventListener('scroll',function(){if(L.classList.contains('on'))place(
 })();
 </script>
 <script>
-/* ---- Aviso de cambio de dirección: solo se muestra en la dirección antigua ---- */
+/* ---- Dirección antigua: aviso con cuenta atrás de 3 s y redirección automática a la nueva ---- */
 (function(){
   var NEW='https://urg-hsa.github.io/protocolos-uo/';
   if(location.hostname!=='infanteeric03-spec.github.io') return;
-  try{ if(sessionStorage.getItem('uoMoveNoticeClosed')) return; }catch(e){}
+  var dest=NEW+location.search+location.hash, n=3;
   var d=document.createElement('div');d.className='move-notice';d.setAttribute('role','alert');
-  d.innerHTML='<span>⚠️ <b>Esta web ha cambiado de dirección.</b> La nueva es <b>urg-hsa.github.io/protocolos-uo</b></span>'+
-    '<a class="mn-go" href="'+NEW+'">Ir a la nueva dirección →</a>'+
-    '<small>Guarda el nuevo enlace. Si tenías la app instalada, desinstálala e instálala de nuevo desde la nueva dirección. Esta dirección dejará de actualizarse.</small>'+
-    '<button type="button" class="mn-x" aria-label="Cerrar aviso">×</button>';
+  d.innerHTML='<span>⚠️ <b>Este enlace dejará de estar disponible.</b> Serás redirigido a la nueva dirección en <b class="mn-n">'+n+'</b> s…</span>'+
+    '<a class="mn-go" href="'+dest+'">Ir ahora →</a>'+
+    '<small>Guarda el nuevo enlace: <span style="white-space:nowrap">urg-hsa.github.io/protocolos-uo</span>. Si tenías la app instalada, instálala de nuevo desde allí.</small>';
   document.body.insertBefore(d,document.body.firstChild);document.body.classList.add('has-move-notice');
   function fit(){document.body.style.setProperty('--mn-h',d.offsetHeight+'px');}
   fit();window.addEventListener('resize',fit);
-  d.querySelector('.mn-x').addEventListener('click',function(){d.remove();document.body.classList.remove('has-move-notice');try{sessionStorage.setItem('uoMoveNoticeClosed','1');}catch(e){}});
+  var num=d.querySelector('.mn-n');
+  var t=setInterval(function(){n--;if(n>0){num.textContent=n;}else{clearInterval(t);num.textContent='0';location.replace(dest);}},1000);
 })();
 </script>
 <script>
