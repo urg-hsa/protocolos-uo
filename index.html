@@ -885,6 +885,10 @@
   body.has-move-notice .topbar{top:var(--mn-h,0px);}
   @media print{.move-notice{display:none !important;} body.has-move-notice{padding-top:0;}}
   .welcome-card h1 .wtitle{display:inline-block; white-space:nowrap; max-width:100%;}
+  /* la tarjeta de inicio nunca más ancha que la pantalla (con letra grande del móvil el título la ensanchaba) */
+  .welcome-card{min-width:0; box-sizing:border-box;}
+  .welcome-screen{box-sizing:border-box; max-width:100vw; overflow-x:hidden;}
+  @media (max-width:600px){ .welcome-screen{padding-left:max(20px, env(safe-area-inset-left)); padding-right:max(20px, env(safe-area-inset-right));} .welcome-card{width:100%;} }
   .tour-skip,.tour-next,.tour-count{white-space:nowrap;}
   .tour-bar{flex-wrap:nowrap;}
   .tour-mid,.tour-skip,.tour-next{flex:none;}
