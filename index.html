@@ -7542,8 +7542,9 @@
       banner.className = 'status-banner status-banner-criteria status-low';
       banner.textContent = 'Cumple los criterios de inclusión, sin exclusiones → candidato a Unidad de Observación.';
     } else if(anyChecked(inc)){
-      banner.className = 'status-banner status-banner-criteria status-mid';
-      banner.textContent = 'Criterios de inclusión incompletos, sigue marcando los ítems.';
+      // caso particular: para entrar en la UO deben cumplirse TODOS los criterios de inclusión; si falta alguno, no es candidato
+      banner.className = 'status-banner status-banner-criteria status-high';
+      banner.textContent = 'No reúne todos los criterios de inclusión → no candidato a Unidad de Observación.';
     } else {
       banner.className = 'status-banner status-banner-criteria status-neutral';
       banner.textContent = 'Marca los criterios para ver la recomendación.';
@@ -8918,7 +8919,7 @@ window.addEventListener('scroll',function(){if(L.classList.contains('on'))place(
       exc:{pe1:'acidosis respiratoria establecida (pH 7,30–7,35 con PaCO₂ elevada)',pe2:'hipoxemia grave persistente que requiere FiO₂ elevadas',pe3:'complicaciones agudas graves (neumonía, TEP, neumotórax o arritmias de nuevo diagnóstico con repercusión clínica)',pe4:'perfil de alto riesgo (agudizador frecuente o EPOC muy grave con FEV1 < 30 %)'},
       ok:'Cumple criterios para ingreso en la Unidad de Observación según el protocolo de EPOC.',
       no:'No es candidato a ingreso en la Unidad de Observación. Valorar ingreso hospitalario o área de críticos según la gravedad.'},
-    neumonia:{banner:'neumonia-status',name:'neumonía',scores:function(){return [score('curbNum','curbCat','CURB-65','.curb-row.picked')];},
+    neumonia:{banner:'neumonia-status',name:'neumonía',incAll:true,scores:function(){return [score('curbNum','curbCat','CURB-65','.curb-row.picked')];},
       subject:function(){return on('ni1')?'Paciente con diagnóstico de neumonía':'Paciente con sospecha de neumonía';},
       inc:{ni2:'CURB-65 bajo (0–1)',ni3:'hemodinámicamente estable',ni4:'SpO₂ > 91–92 % con oxigenoterapia de bajo flujo o basal',ni5:'tolerancia oral conservada o recuperable en 12–24 h',ni6:'plan terapéutico definido (tratamiento ambulatorio o traslado a HAD/HFA en 12–24 h)'},
       exc:{ne1:'inestabilidad hemodinámica',ne2:'insuficiencia respiratoria grave',ne3:'necesidad de oxigenoterapia de alto flujo o VMNI',ne4:'sepsis o sospecha de sepsis grave',ne5:'deterioro clínico rápido durante la atención en Urgencias',ne6:'comorbilidad descompensada importante',ne7:'cavitación, derrame pleural y/o afectación bilateral en la radiografía'},
@@ -8947,7 +8948,14 @@ window.addEventListener('scroll',function(){if(L.classList.contains('on'))place(
     var st=state(c.banner),subj=c.subject().replace(/^Paciente/,person()),lead=c.lead||', ';
     var subjLow=subj.charAt(0).toLowerCase()+subj.slice(1);
     var I=typeof c.inc==='function'?c.inc():pick(c.inc),E=pick(c.exc),X=extras(c),t;
-    if(st==='high'&&E.length){
+    if(st==='high'&&!E.length&&c.incAll){
+      // faltan criterios de inclusión (deben cumplirse todos): no reúne los requisitos → no es candidato
+      var Pm=c.pend?c.pend():[],bodyM=I.length?lead+join(I):'',faltaM=(Pm.length>1?'faltan ':'falta ')+join(Pm);
+      var noUO=alt(['No reúne todos los requisitos para ingresar en la Unidad de Observación, por lo que no es candidato según el protocolo de '+c.name+'.','Al no cumplirse todos los criterios de inclusión, se desestima el ingreso en la Unidad de Observación.','No cumple todos los criterios de inclusión del protocolo de '+c.name+', por lo que no es candidato a la Unidad de Observación.']);
+      t=alt([subj+bodyM+'. No reúne todos los criterios de inclusión: '+faltaM+'.'+X+'\n\n'+noUO,
+             subj+bodyM+'. Criterios de inclusión no cumplidos: '+join(Pm)+'.'+X+'\n\n'+noUO,
+             'Se valora a '+subjLow+bodyM+'. No se cumplen todos los criterios de inclusión ('+faltaM+').'+X+'\n\n'+noUO]);
+    } else if(st==='high'&&E.length){
       t=alt([subj+' que presenta '+join(E)+EXC_TAIL(E.length)+X+'\n\n'+noText(c),
              subj+'. Presenta '+join(E)+(E.length>1?', criterios':', criterio')+' que excluye'+(E.length>1?'n':'')+' el ingreso en la Unidad de Observación.'+X+'\n\n'+noText(c),
              'Se valora a '+subjLow+'. Se objetiva '+join(E)+EXC_TAIL(E.length)+X+'\n\n'+noText(c)]);
