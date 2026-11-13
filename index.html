@@ -5397,8 +5397,8 @@
   <div class="modal-box comment-box">
     <span class="beta-badge">Beta</span>
     <h3>📝 Comentario</h3>
-    <p class="modal-sub">Redactado a partir de los criterios marcados. Revísalo y adáptalo antes de incorporarlo al informe o nota clínica. Puedes editar el texto directamente.</p>
-    <div class="comment-opts" id="commentOpts">
+    <p class="modal-sub">Redactado a partir de los criterios marcados. Revísalo y adáptalo antes de incorporarlo al informe o nota clínica.</p>
+    <div class="comment-opts" id="commentOpts" hidden>
       <div class="cm-row"><label class="cm-lab" for="cmEdad">Edad</label><input type="text" inputmode="numeric" id="cmEdad" maxlength="3" placeholder="años" autocomplete="off">
         <div class="cm-seg" id="cmSexo" role="group" aria-label="Sexo"><button type="button" data-v="H" aria-pressed="false">Varón</button><button type="button" data-v="M" aria-pressed="false">Mujer</button></div>
         <label class="cm-chk" id="cmScoresRow"><input type="checkbox" id="cmScores" checked> Incluir escalas</label></div>
@@ -5500,7 +5500,8 @@
       <button class="edit-toggle-btn" id="publishConfigBtn" style="display: none;"><span class="icon-gear" aria-hidden="true" style="margin-right:6px;"></span>Configurar publicación en GitHub</button>
       <button class="edit-toggle-btn" id="reorderBtn">↕️ Reordenar protocolos y apartados</button>
       <button class="edit-toggle-btn" id="hideWipBtn">🚧 Mostrar aviso "En obras"</button>
-      <button class="edit-toggle-btn" id="passwordSettingsBtn">🔑 Editar contraseña</button>
+      <button class="edit-toggle-btn" id="commentPlusBtn">📝 Comentario mejorado (beta): desactivado</button>
+      <button class="edit-toggle-btn" id="passwordSettingsBtn" style="display:none;">🔑 Crear contraseña</button>
     </div>
     <div class="modal-actions">
       <button class="secondary" id="settingsCloseBtn">Cerrar</button>
@@ -5539,10 +5540,10 @@
 <div class="modal-overlay" id="passwordUnlockModal">
   <div class="modal-box">
     <h3>Contraseña necesaria</h3>
-    <p class="modal-sub">Introduce la contraseña para desbloquear la sesión.</p>
+    <p class="modal-sub">Introduce la contraseña para abrir la configuración.</p>
     <input type="password" id="pwUnlockInput" autocomplete="off" placeholder="Contraseña" style="margin-top:4px;">
     <p id="pwUnlockError" style="color: var(--high); font-size: 12.5px; display: block; margin-top: 10px;">Contraseña incorrecta.</p>
-    <p class="pw-forgot"><a href="#" class="pw-forgot-link">¿Has olvidado la contraseña?</a></p>
+    <p class="pw-forgot"><a href="#" class="pw-forgot-link">¿Has olvidado la contraseña?</a> · <a href="#" id="pwEditFromUnlock">Editar contraseña</a></p>
     <div class="modal-actions">
       <button class="primary" id="pwUnlockSubmit">Entrar</button>
       <button class="secondary" id="pwUnlockCancel">Cancelar</button>
@@ -6158,8 +6159,12 @@
 
   // ---- modal de configuración ----
   function openSettingsModal(){
-    document.getElementById('settingsModal').classList.add('open');
-    document.getElementById('settingsToggle').setAttribute('aria-expanded', 'true');
+    // con contraseña, la lista de opciones solo se abre tras introducirla
+    const go = ()=>{
+      document.getElementById('settingsModal').classList.add('open');
+      document.getElementById('settingsToggle').setAttribute('aria-expanded', 'true');
+    };
+    if(typeof window.settingsGate === 'function') window.settingsGate(go); else go();
   }
   function closeSettingsModal(){
     document.getElementById('settingsModal').classList.remove('open');
@@ -6664,12 +6669,15 @@
       if(!sessionLocked){ action(); return; }
       notifyLocked();
     };
+    window.settingsGate = function(open){
+      if(sessionLocked && isPasswordSet()) openUnlockModal(open); else open();
+    };
     window.canAccessHidden = function(){
       return !sessionLocked;
     };
 
     // -- bloqueo / desbloqueo de la sesión (candado de Configuración) --
-    const LOCKABLE_IDS = ['editToggle', 'publishConfigBtn', 'reorderBtn', 'hideWipBtn'];
+    const LOCKABLE_IDS = ['editToggle', 'publishConfigBtn', 'reorderBtn', 'hideWipBtn', 'commentPlusBtn'];
     const lockBtn = document.getElementById('sessionLockBtn');
 
     function notifyLocked(){
@@ -6682,6 +6690,8 @@
         b.classList.toggle('lock-dim', sessionLocked);
         if(sessionLocked) b.setAttribute('aria-disabled', 'true'); else b.removeAttribute('aria-disabled');
       });
+      const pwBtn = document.getElementById('passwordSettingsBtn');
+      if(pwBtn) pwBtn.style.display = isPasswordSet() ? 'none' : '';   // con contraseña, «Editar contraseña» está en el diálogo del candado
       if(lockBtn){
         const label = sessionLocked ? 'Desbloquear sesión' : 'Bloquear sesión';
         lockBtn.textContent = sessionLocked ? '🔒' : '🔓';
@@ -6702,7 +6712,11 @@
     if(lockBtn){
       lockBtn.addEventListener('click', (e)=>{
         e.stopPropagation();
-        if(!sessionLocked){ setLocked(true); return; }
+        if(!sessionLocked){
+          setLocked(true);
+          if(isPasswordSet()) document.getElementById('settingsCloseBtn').click();   // al bloquear, la lista se cierra
+          return;
+        }
         if(isPasswordSet()) openUnlockModal(null);   // pide la contraseña
         else setLocked(false);                        // sin contraseña, se desbloquea directamente
       });
@@ -6739,6 +6753,22 @@
       });
     });
     applyWipVisibility();
+
+    // -- comentario mejorado (beta): opcional, solo lo activa el administrador --
+    function isPlusOn(){ return document.body.dataset.commentPlus === 'true'; }
+    function applyPlusLabel(){
+      const b = document.getElementById('commentPlusBtn');
+      if(b) b.textContent = '📝 Comentario mejorado (beta): ' + (isPlusOn() ? 'activado' : 'desactivado');
+    }
+    document.getElementById('commentPlusBtn').addEventListener('click', ()=>{
+      window.requireUnlock(()=>{
+        const on = !isPlusOn();
+        document.body.dataset.commentPlus = on ? 'true' : 'false';
+        applyPlusLabel();
+        persistAfterPasswordChange(on ? 'Comentario mejorado activado.' : 'Comentario mejorado desactivado.');
+      });
+    });
+    applyPlusLabel();
     applyLockState();
 
     // -- crear / cambiar / quitar contraseña, desde Configuración --
@@ -6763,6 +6793,7 @@
       pwModal.classList.add('open');
     }
     document.getElementById('passwordSettingsBtn').addEventListener('click', openPasswordSettings);
+    document.getElementById('pwEditFromUnlock').addEventListener('click', (e)=>{ e.preventDefault(); closeUnlockModal(); openPasswordSettings(); });
     document.getElementById('pwSettingsCancel').addEventListener('click', ()=> pwModal.classList.remove('open'));
     pwModal.addEventListener('click', (e)=>{ if(e.target===pwModal) pwModal.classList.remove('open'); });
 
@@ -8884,14 +8915,16 @@ window.addEventListener('scroll',function(){if(L.classList.contains('on'))place(
       pend:function(){var n={ni1:'diagnóstico de neumonía',ni2:'CURB-65 bajo (0–1)',ni3:'estabilidad hemodinámica',ni4:'SpO₂ > 91–92 % con bajo flujo o basal',ni5:'tolerancia oral (o recuperable en 12–24 h)',ni6:'plan terapéutico definido'};return Object.keys(n).filter(function(k){return !on(k);}).map(function(k){return n[k];});}}
   };
   var V=0,KEY=null;
+  function plus(){return document.body.dataset.commentPlus==='true';}
   function val(id){var e=document.getElementById(id);return e?e.value.trim():'';}
-  function sexo(){var b=document.querySelector('#cmSexo button.on');return b?b.dataset.v:'';}
-  function person(){var sx=sexo(),ed=val('cmEdad').replace(/[^\d]/g,'');var n=sx==='M'?'Mujer':sx==='H'?'Varón':'Paciente';return n+(ed?' de '+ed+' años':'');}
-  function alt(a){return a[V%a.length];}
+  function sexo(){if(!plus())return '';var b=document.querySelector('#cmSexo button.on');return b?b.dataset.v:'';}
+  function person(){if(!plus())return 'Paciente';var sx=sexo(),ed=val('cmEdad').replace(/[^\d]/g,'');var n=sx==='M'?'Mujer':sx==='H'?'Varón':'Paciente';return n+(ed?' de '+ed+' años':'');}
+  function alt(a){return plus()?a[V%a.length]:a[0];}
   function okText(c){var uo=c.uo?'la Unidad de Observación ('+c.uo+')':'la Unidad de Observación';
     return alt([c.ok,'Por todo ello, se considera candidato a ingreso en '+uo+' según el protocolo de '+c.name+'.','Se propone ingreso en '+uo+', conforme al protocolo de '+c.name+'.']);}
   function noText(c){var uo=c.uo?'la Unidad de Observación ('+c.uo+')':'la Unidad de Observación',rest=c.no.split('. ').slice(1).join('. ');return alt([c.no,'Por tanto, se desestima el ingreso en '+uo+'.'+(rest?' '+rest:'')]);}
   function extras(c){
+    if(!plus())return '';
     var out=[];
     if(document.getElementById('cmScores').checked&&c.scores){var sc=c.scores().filter(Boolean);if(sc.length)out.push(alt(['Escalas: ','Puntuaciones calculadas: ','En la estratificación del riesgo: '])+join(sc)+'.');}
     var x=val('cmExtra');if(x){x=x.charAt(0).toUpperCase()+x.slice(1);if(!/[.!?]$/.test(x))x+='.';out.push(x);}
@@ -8933,11 +8966,11 @@ window.addEventListener('scroll',function(){if(L.classList.contains('on'))place(
   function render(){
     var t=generate(KEY);
     box.textContent=t?t.trim():'Marca primero los criterios de inclusión y, si los hay, de exclusión para poder redactar el comentario.';
-    box.contentEditable=t?'true':'false';cp.style.display=t?'':'none';again.style.display=t?'':'none';
+    box.contentEditable=(t&&plus())?'true':'false';cp.style.display=t?'':'none';again.style.display=(t&&plus())?'':'none';
   }
   document.addEventListener('click',function(e){
     var b=e.target.closest('.gen-comment-btn');if(!b)return;
-    title.innerHTML=T0;sub.innerHTML=S0;sub.hidden=false;
+    title.innerHTML=T0;sub.innerHTML=S0+(plus()?' Puedes editar el texto directamente.':'');sub.hidden=false;
     if(b.classList.contains('is-off')){
       title.innerHTML='📝 Generar comentario';sub.hidden=true;opts.hidden=true;box.contentEditable='false';
       box.textContent='De momento esta función no está activa para este protocolo. Está disponible en dolor torácico, fibrilación auricular, agudización asmática, agudización de EPOC y neumonía.';
@@ -8945,7 +8978,7 @@ window.addEventListener('scroll',function(){if(L.classList.contains('on'))place(
     }
     if(KEY!==b.dataset.comment){KEY=b.dataset.comment;V=0;document.getElementById('cmEdad').value='';document.getElementById('cmExtra').value='';document.querySelectorAll('#cmSexo button').forEach(function(x){x.classList.remove('on');x.setAttribute('aria-pressed','false');});}
     var c=CFG[KEY];document.getElementById('cmScoresRow').hidden=!(c&&c.scores);
-    opts.hidden=false;render();m.classList.add('open');
+    opts.hidden=!plus();render();m.classList.add('open');
   });
   document.querySelectorAll('#cmSexo button').forEach(function(x){x.addEventListener('click',function(){var was=x.classList.contains('on');document.querySelectorAll('#cmSexo button').forEach(function(y){y.classList.remove('on');y.setAttribute('aria-pressed','false');});if(!was){x.classList.add('on');x.setAttribute('aria-pressed','true');}render();});});
   ['cmEdad','cmExtra'].forEach(function(id){document.getElementById(id).addEventListener('input',render);});
