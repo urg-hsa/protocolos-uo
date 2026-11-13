@@ -898,6 +898,21 @@
   #commentModal .modal-box{width:min(560px,94vw); max-height:88vh; overflow:auto;}
   .comment-text{border:1px solid var(--line); border-radius:10px; padding:14px 16px; background:var(--paper); font-size:15px; line-height:1.55; white-space:pre-wrap; user-select:text; -webkit-user-select:text;}
   @media print{.gen-comment-row{display:none !important;}}
+  .comment-opts{display:flex; flex-direction:column; gap:8px; margin:4px 0 10px;}
+  .comment-opts .cm-row{display:flex; align-items:center; gap:8px 10px; flex-wrap:wrap;}
+  .comment-opts .cm-lab{font-size:13px; color:var(--ink-soft); font-weight:600;}
+  .comment-opts #cmEdad{width:64px; font:inherit; font-size:14px; padding:6px 8px; border:1px solid var(--line); border-radius:8px; background:var(--paper); color:var(--ink);}
+  .comment-opts .cm-seg{display:inline-flex; border:1px solid var(--teal); border-radius:999px; overflow:hidden;}
+  .comment-opts .cm-seg button{font:inherit; font-size:13px; font-weight:600; padding:6px 12px; border:0; background:transparent; color:var(--teal-dark); cursor:pointer;}
+  .comment-opts .cm-seg button+button{border-left:1px solid var(--teal);}
+  .comment-opts .cm-seg button.on{background:var(--teal); color:#fff;}
+  .comment-opts .cm-chk{font-size:13px; color:var(--ink-soft); display:inline-flex; align-items:center; gap:5px; margin-left:auto; cursor:pointer;}
+  .comment-opts .cm-chk[hidden], .comment-opts[hidden]{display:none;}
+  .comment-opts textarea{width:100%; box-sizing:border-box; font:inherit; font-size:14px; padding:8px 10px; border:1px solid var(--line); border-radius:8px; background:var(--paper); color:var(--ink); resize:vertical;}
+  .comment-text[contenteditable=true]{outline:none; cursor:text;}
+  .comment-text[contenteditable=true]:focus{border-color:var(--teal); box-shadow:0 0 0 2px rgba(47,122,120,.18);}
+  #commentModal .modal-actions{flex-wrap:wrap;}
+  @media (max-width:600px){ #commentModal .modal-actions button{flex:1 1 auto;} #commentModal #commentCopy{flex-basis:100%; order:-1; text-align:center;} }
   .gen-comment-btn.is-off{color:var(--ink-soft); border-color:var(--line); opacity:.6; cursor:not-allowed;}
   .gen-comment-btn.is-off:hover{background:transparent;}
   .beta-badge{display:inline-block; margin:0 0 8px; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7a4a00; background:#FBE3B0; border:1px solid #E8B93F; border-radius:999px; padding:2px 10px;}
@@ -5382,9 +5397,15 @@
   <div class="modal-box comment-box">
     <span class="beta-badge">Beta</span>
     <h3>📝 Comentario</h3>
-    <p class="modal-sub">Redactado a partir de los criterios marcados. Revísalo y adáptalo antes de incorporarlo al informe o nota clínica.</p>
+    <p class="modal-sub">Redactado a partir de los criterios marcados. Revísalo y adáptalo antes de incorporarlo al informe o nota clínica. Puedes editar el texto directamente.</p>
+    <div class="comment-opts" id="commentOpts">
+      <div class="cm-row"><label class="cm-lab" for="cmEdad">Edad</label><input type="text" inputmode="numeric" id="cmEdad" maxlength="3" placeholder="años" autocomplete="off">
+        <div class="cm-seg" id="cmSexo" role="group" aria-label="Sexo"><button type="button" data-v="H" aria-pressed="false">Varón</button><button type="button" data-v="M" aria-pressed="false">Mujer</button></div>
+        <label class="cm-chk" id="cmScoresRow"><input type="checkbox" id="cmScores" checked> Incluir escalas</label></div>
+      <textarea id="cmExtra" rows="2" placeholder="Datos adicionales (opcional): p. ej. ECG en ritmo sinusal sin alteraciones agudas, troponina inicial negativa…"></textarea>
+    </div>
     <div class="comment-text" id="commentText"></div>
-    <div class="modal-actions"><button class="secondary" type="button" id="commentClose">Cerrar</button><button class="primary" type="button" id="commentCopy">Copiar texto</button></div>
+    <div class="modal-actions"><button class="secondary" type="button" id="commentClose">Cerrar</button><button class="secondary" type="button" id="commentAgain">🔄 Otra redacción</button><button class="primary" type="button" id="commentCopy">Copiar texto</button></div>
   </div>
 </div>
 
@@ -8810,14 +8831,24 @@ window.addEventListener('scroll',function(){if(L.classList.contains('on'))place(
   function pick(map){return Object.keys(map).filter(on).map(function(k){return map[k];});}
   function state(id){var b=document.getElementById(id);return b?((b.className.match(/status-(neutral|low|mid|high|partial)/)||[])[1]||'neutral'):'neutral';}
   var EXC_TAIL=function(n){return n>1?', criterios de exclusión de la Unidad de Observación.':', criterio de exclusión de la Unidad de Observación.';};
+  function txt(id){var e=document.getElementById(id);return e?e.textContent.trim():'';}
+  function lc(t){return t&&/^.[a-záéíóúñ ]/.test(t)?t.charAt(0).toLowerCase()+t.slice(1):t;}
+  function score(numId,catId,label,touched){
+    var n=txt(numId);if(!n||n==='—')return null;
+    if(n==='0'&&touched&&!document.querySelector(touched))return null;
+    var cat=txt(catId);if(cat.indexOf('→')>-1)cat=cat.split('→').pop();
+    cat=cat.split(/\.\s|\(/)[0].replace(/[.\s]+$/,'').trim();
+    return label+' '+n+(cat?' ('+lc(cat)+')':'');
+  }
+  function pafi(){var m=txt('pafiCalcResult').match(/=\s*([\d.,]+)\s*→\s*(.+?)\.?$/);if(!m)return null;return 'PaO₂/FiO₂ '+m[1]+' ('+lc(m[2].replace(/\s*\((.*)\)\s*$/,', $1'))+')';}
   var CFG={
-    fa:{banner:'fa-status',
+    fa:{banner:'fa-status',name:'FA/flutter',uo:'UOME',scores:function(){return [score('chadsvaNum','chadsvaCat','CHA₂DS₂-VA','[data-group="chadsva-score"] input:checked'),score('hasbledNum','hasbledCat','HAS-BLED','[data-group="hasbled-score"] input:checked')];},
       subject:function(){return on('fi1')?'Paciente con fibrilación o flutter auricular (conocido o de nuevo diagnóstico)':'Paciente con fibrilación o flutter auricular';},
       inc:{fi2:'hemodinámicamente estable',fi3:'con respuesta ventricular rápida susceptible de control farmacológico',fi4:'que precisa monitorización tras intervención terapéutica',fi5:'sin indicación de cardioversión urgente',fi6:'candidato a manejo en Unidad de Observación'},
       exc:{fe1:'shock',fe2:'PAS < 90 mmHg persistente',fe3:'dolor torácico de características isquémicas',fe4:'síndrome coronario agudo',fe5:'edema agudo de pulmón',fe6:'insuficiencia cardiaca aguda',fe7:'síncope de probable origen arrítmico',fe8:'necesidad de cardioversión eléctrica urgente',fe9:'síndrome de preexcitación',fe10:'arritmias complejas asociadas',fe11:'sepsis grave'},
       ok:'Cumple criterios para ingreso en la Unidad de Observación (UOME) según el protocolo de FA/flutter.',
       no:'No es candidato a ingreso en la UOME. Se recomienda valoración en área de críticos o ingreso hospitalario según la situación clínica.'},
-    torax:{banner:'admission-status',
+    torax:{banner:'admission-status',name:'dolor torácico',scores:function(){return [score('scoreNum','scoreCat','EDACS')];},
       subject:function(){return 'Paciente con dolor torácico';},
       inc:function(){
         var a=['ia1','ia2','ia3','ia4','ia5'],r=[];
@@ -8832,19 +8863,19 @@ window.addEventListener('scroll',function(){if(L.classList.contains('on'))place(
       no:'No es candidato a ingreso en la Unidad de Observación. Activar el circuito correspondiente según la sospecha clínica.',
       mid:function(){return 'No se ha identificado ningún criterio de riesgo intermedio (sospecha moderada de SCA, antecedentes cardiovasculares que requieran observación o necesidad de completar el protocolo seriado). Completar la valoración antes de decidir el ingreso en la Unidad de Observación.';},
       pend:function(){var n={ia1:'TA sistólica ≥ 90 mmHg sin soporte vasoactivo',ia2:'FC 50–110 lpm',ia3:'SpO₂ ≥ 92 % (o basal)',ia4:'nivel de conciencia conservado',ia5:'ausencia de insuficiencia respiratoria aguda'};return Object.keys(n).filter(function(k){return !on(k);}).map(function(k){return n[k];});}},
-    asma:{banner:'asma-status',
+    asma:{banner:'asma-status',name:'asma',
       subject:function(){return 'Paciente con agudización asmática';}, lead:' que, tras el tratamiento inicial en Urgencias, presenta ',
       inc:{sai1:'sibilancias espiratorias persistentes o intensas',sai2:'PEF o FEV1 entre el 50 y el 70 %',sai3:'frecuencia respiratoria < 30 rpm',sai4:'estabilidad hemodinámica (FC < 120 lpm, TA normal)',sai5:'habla en frases cortas con preferencia por estar sentado',sai6:'uso frecuente de musculatura accesoria',sai7:'nivel de conciencia conservado',sai8:'ausencia de complicaciones (neumonía, neumotórax) y de comorbilidades como la insuficiencia cardiaca'},
       exc:{sae1:'FR > 30 rpm con uso continuo de musculatura accesoria',sae2:'SpO₂ < 90 %',sae3:'inestabilidad hemodinámica (hipotensión, FC > 120 lpm)',sae4:'PEF o FEV1 < 50 %',sae5:'incapacidad para hablar, beber o acostarse',sae6:'alteración del nivel de conciencia',sae7:'tórax silencioso',sae8:'insuficiencia respiratoria grave (hipercapnia o alteración del equilibrio ácido-base)',sae9:'enfermedad concomitante (insuficiencia cardiaca o alteraciones ECG sugestivas de isquemia)',sae10:'broncoespasmo secundario a otra etiología (broncoaspiración, cuerpo extraño)',sae11:'necesidad de VMNI',sae12:'necesidad de sulfato de magnesio y/o adrenalina como tratamiento inicial',sae13:'≥ 2 hospitalizaciones o ≥ 3 visitas a Urgencias en el último año',sae14:'antecedente de ingreso en UCI, intubación o ventilación mecánica por asma',sae15:'uso frecuente o abuso de broncodilatadores de rescate (SABA)',sae16:'tratamiento reciente con corticoides orales',sae17:'ausencia de tratamiento con corticoides inhalados',sae18:'falta de seguimiento médico o problemas psiquiátricos o sociales que dificultan el tratamiento'},
       ok:'Cumple criterios para ingreso en la Unidad de Observación según el protocolo de asma.',
       no:'No es candidato a ingreso en la Unidad de Observación. Valorar ingreso hospitalario o área de críticos según la gravedad.'},
-    epoc:{banner:'epoc-status',
+    epoc:{banner:'epoc-status',name:'EPOC',scores:function(){return [score('decafNum','decafCat','DECAF'),pafi()];},
       subject:function(){return 'Paciente con agudización de EPOC';}, lead:' que presenta ',
       inc:{pi1:'insuficiencia respiratoria aguda con hipoxemia moderada corregible con oxigenoterapia de bajo flujo',pi2:'hipercapnia leve sin acidosis (PaCO₂ > 45 mmHg con pH > 7,35)',pi3:'respuesta parcial a los broncodilatadores iniciales, sin haber recuperado aún su situación basal',pi4:'comorbilidades levemente descompensadas (ICC periférica, cardiopatía isquémica estable o arritmias crónicas controladas)',pi5:'limitaciones físicas, cognitivas o sociofamiliares para el tratamiento domiciliario'},
       exc:{pe1:'acidosis respiratoria establecida (pH 7,30–7,35 con PaCO₂ elevada)',pe2:'hipoxemia grave persistente que requiere FiO₂ elevadas',pe3:'complicaciones agudas graves (neumonía, TEP, neumotórax o arritmias de nuevo diagnóstico con repercusión clínica)',pe4:'perfil de alto riesgo (agudizador frecuente o EPOC muy grave con FEV1 < 30 %)'},
       ok:'Cumple criterios para ingreso en la Unidad de Observación según el protocolo de EPOC.',
       no:'No es candidato a ingreso en la Unidad de Observación. Valorar ingreso hospitalario o área de críticos según la gravedad.'},
-    neumonia:{banner:'neumonia-status',
+    neumonia:{banner:'neumonia-status',name:'neumonía',scores:function(){return [score('curbNum','curbCat','CURB-65','.curb-row.picked')];},
       subject:function(){return on('ni1')?'Paciente con diagnóstico de neumonía':'Paciente con sospecha de neumonía';},
       inc:{ni2:'CURB-65 bajo (0–1)',ni3:'hemodinámicamente estable',ni4:'SpO₂ > 91–92 % con oxigenoterapia de bajo flujo o basal',ni5:'tolerancia oral conservada o recuperable en 12–24 h',ni6:'plan terapéutico definido (tratamiento ambulatorio o traslado a HAD/HFA en 12–24 h)'},
       exc:{ne1:'inestabilidad hemodinámica',ne2:'insuficiencia respiratoria grave',ne3:'necesidad de oxigenoterapia de alto flujo o VMNI',ne4:'sepsis o sospecha de sepsis grave',ne5:'deterioro clínico rápido durante la atención en Urgencias',ne6:'comorbilidad descompensada importante',ne7:'cavitación, derrame pleural y/o afectación bilateral en la radiografía'},
@@ -8852,42 +8883,79 @@ window.addEventListener('scroll',function(){if(L.classList.contains('on'))place(
       no:'No es candidato a ingreso en la Unidad de Observación. Valorar ingreso hospitalario o área de críticos según la gravedad.',
       pend:function(){var n={ni1:'diagnóstico de neumonía',ni2:'CURB-65 bajo (0–1)',ni3:'estabilidad hemodinámica',ni4:'SpO₂ > 91–92 % con bajo flujo o basal',ni5:'tolerancia oral (o recuperable en 12–24 h)',ni6:'plan terapéutico definido'};return Object.keys(n).filter(function(k){return !on(k);}).map(function(k){return n[k];});}}
   };
+  var V=0,KEY=null;
+  function val(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+  function sexo(){var b=document.querySelector('#cmSexo button.on');return b?b.dataset.v:'';}
+  function person(){var sx=sexo(),ed=val('cmEdad').replace(/[^\d]/g,'');var n=sx==='M'?'Mujer':sx==='H'?'Varón':'Paciente';return n+(ed?' de '+ed+' años':'');}
+  function alt(a){return a[V%a.length];}
+  function okText(c){var uo=c.uo?'la Unidad de Observación ('+c.uo+')':'la Unidad de Observación';
+    return alt([c.ok,'Por todo ello, se considera candidato a ingreso en '+uo+' según el protocolo de '+c.name+'.','Se propone ingreso en '+uo+', conforme al protocolo de '+c.name+'.']);}
+  function noText(c){var uo=c.uo?'la Unidad de Observación ('+c.uo+')':'la Unidad de Observación',rest=c.no.split('. ').slice(1).join('. ');return alt([c.no,'Por tanto, se desestima el ingreso en '+uo+'.'+(rest?' '+rest:'')]);}
+  function extras(c){
+    var out=[];
+    if(document.getElementById('cmScores').checked&&c.scores){var sc=c.scores().filter(Boolean);if(sc.length)out.push(alt(['Escalas: ','Puntuaciones calculadas: ','En la estratificación del riesgo: '])+join(sc)+'.');}
+    var x=val('cmExtra');if(x){x=x.charAt(0).toUpperCase()+x.slice(1);if(!/[.!?]$/.test(x))x+='.';out.push(x);}
+    return out.length?' '+out.join(' '):'';
+  }
   function generate(key){
     var c=CFG[key];if(!c)return null;
-    var st=state(c.banner),subj=c.subject(),lead=c.lead||', ';
-    var I=typeof c.inc==='function'?c.inc():pick(c.inc),E=pick(c.exc);
-    if(st==='high'&&E.length) return subj+' que presenta '+join(E)+EXC_TAIL(E.length)+'\n\n'+c.no;
-    if(st==='low') return subj+(I.length?lead+join(I):'')+'. No presenta criterios de exclusión.\n\n'+c.ok;
-    var P=c.pend?c.pend():[],faltan=function(p){return (p.length>1?'faltan ':'falta ')+join(p);};
-    if(!I.length){
-      var sec=document.getElementById(c.banner);sec=sec&&sec.closest('section');
-      if(P.length&&sec&&sec.querySelector('ul.checklist input:checked')) return subj+'. Aún no se cumplen todos los criterios de inclusión: '+faltan(P)+'.\n\nPendiente de completar la valoración antes de decidir el ingreso en la Unidad de Observación.';
-      return null;
+    var st=state(c.banner),subj=c.subject().replace(/^Paciente/,person()),lead=c.lead||', ';
+    var subjLow=subj.charAt(0).toLowerCase()+subj.slice(1);
+    var I=typeof c.inc==='function'?c.inc():pick(c.inc),E=pick(c.exc),X=extras(c),t;
+    if(st==='high'&&E.length){
+      t=alt([subj+' que presenta '+join(E)+EXC_TAIL(E.length)+X+'\n\n'+noText(c),
+             subj+'. Presenta '+join(E)+(E.length>1?', criterios':', criterio')+' que excluye'+(E.length>1?'n':'')+' el ingreso en la Unidad de Observación.'+X+'\n\n'+noText(c),
+             'Se valora a '+subjLow+'. Se objetiva '+join(E)+EXC_TAIL(E.length)+X+'\n\n'+noText(c)]);
+    } else if(st==='low'){
+      var body=I.length?lead+join(I):'';
+      t=alt([subj+body+'. No presenta criterios de exclusión.'+X+'\n\n'+okText(c),
+             subj+body+', sin criterios de exclusión.'+X+'\n\n'+okText(c),
+             'Se valora a '+subjLow+body+'. Se descartan criterios de exclusión.'+X+'\n\n'+okText(c)]);
+    } else {
+      var P=c.pend?c.pend():[],faltan=function(p){return (p.length>1?'faltan ':'falta ')+join(p);};
+      var PEND=alt(['Pendiente de completar la valoración antes de decidir el ingreso en la Unidad de Observación.','Se completará la valoración antes de decidir sobre el ingreso en la Unidad de Observación.','Queda pendiente completar la valoración para decidir el ingreso en la Unidad de Observación.']);
+      if(!I.length){
+        var sec=document.getElementById(c.banner);sec=sec&&sec.closest('section');
+        if(P.length&&sec&&sec.querySelector('ul.checklist input:checked')) t=subj+'. Aún no se cumplen todos los criterios de inclusión: '+faltan(P)+'.'+X+'\n\n'+PEND;
+        else return null;
+      } else {
+        t=subj+lead+join(I)+'.';
+        if(st==='mid'&&c.mid) t+=' '+c.mid()+X;
+        else t+=(P.length?' Aún no se cumplen todos los criterios de inclusión: '+faltan(P)+'.':'')+X+'\n\n'+PEND;
+      }
     }
-    var t=subj+lead+join(I)+'.';
-    if(st==='mid'&&c.mid) return t+' '+c.mid();
-    return t+(P.length?' Aún no se cumplen todos los criterios de inclusión: '+faltan(P)+'.':'')+'\n\nPendiente de completar la valoración antes de decidir el ingreso en la Unidad de Observación.';
+    if(sexo()==='M') t=t.replace(/\bcandidato\b/g,'candidata');
+    return t;
   }
   var m=document.getElementById('commentModal'),box=document.getElementById('commentText');if(!m)return;
-  var cp=document.getElementById('commentCopy'),title=m.querySelector('h3'),sub=m.querySelector('.modal-sub');
+  var cp=document.getElementById('commentCopy'),title=m.querySelector('h3'),sub=m.querySelector('.modal-sub'),opts=document.getElementById('commentOpts'),again=document.getElementById('commentAgain');
   var T0=title.innerHTML,S0=sub.innerHTML;
+  function render(){
+    var t=generate(KEY);
+    box.textContent=t?t.trim():'Marca primero los criterios de inclusión y, si los hay, de exclusión para poder redactar el comentario.';
+    box.contentEditable=t?'true':'false';cp.style.display=t?'':'none';again.style.display=t?'':'none';
+  }
   document.addEventListener('click',function(e){
     var b=e.target.closest('.gen-comment-btn');if(!b)return;
     title.innerHTML=T0;sub.innerHTML=S0;sub.hidden=false;
     if(b.classList.contains('is-off')){
-      title.innerHTML='📝 Generar comentario';sub.hidden=true;
+      title.innerHTML='📝 Generar comentario';sub.hidden=true;opts.hidden=true;box.contentEditable='false';
       box.textContent='De momento esta función no está activa para este protocolo. Está disponible en dolor torácico, fibrilación auricular, agudización asmática, agudización de EPOC y neumonía.';
-      cp.style.display='none';m.classList.add('open');return;
+      cp.style.display='none';again.style.display='none';m.classList.add('open');return;
     }
-    var t=generate(b.dataset.comment);
-    box.textContent=t||'Marca primero los criterios de inclusión y, si los hay, de exclusión para poder redactar el comentario.';
-    cp.style.display=t?'':'none';m.classList.add('open');
+    if(KEY!==b.dataset.comment){KEY=b.dataset.comment;V=0;document.getElementById('cmEdad').value='';document.getElementById('cmExtra').value='';document.querySelectorAll('#cmSexo button').forEach(function(x){x.classList.remove('on');x.setAttribute('aria-pressed','false');});}
+    var c=CFG[KEY];document.getElementById('cmScoresRow').hidden=!(c&&c.scores);
+    opts.hidden=false;render();m.classList.add('open');
   });
+  document.querySelectorAll('#cmSexo button').forEach(function(x){x.addEventListener('click',function(){var was=x.classList.contains('on');document.querySelectorAll('#cmSexo button').forEach(function(y){y.classList.remove('on');y.setAttribute('aria-pressed','false');});if(!was){x.classList.add('on');x.setAttribute('aria-pressed','true');}render();});});
+  ['cmEdad','cmExtra'].forEach(function(id){document.getElementById(id).addEventListener('input',render);});
+  document.getElementById('cmScores').addEventListener('change',render);
+  again.addEventListener('click',function(){V++;render();});
   document.getElementById('commentClose').addEventListener('click',function(){m.classList.remove('open');});
   m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('open');});
   document.addEventListener('keydown',function(e){if(e.key==='Escape')m.classList.remove('open');});
   cp.addEventListener('click',function(){
-    var b=this,t=box.textContent;
+    var b=this,t=box.innerText.replace(/\n{3,}/g,'\n\n').trim();
     function ok(){b.textContent='✓ Copiado';setTimeout(function(){b.textContent='Copiar texto';},1600);}
     function fallback(){var r=document.createRange();r.selectNodeContents(box);var sel=getSelection();sel.removeAllRanges();sel.addRange(r);try{document.execCommand('copy');ok();}catch(x){}}
     if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(ok,fallback);else fallback();
