@@ -210,6 +210,8 @@
   }
 
   .eyebrow{font-size:13px; color:var(--teal-dark); margin-bottom:4px;}
+  /* móvil: títulos de pestaña más pequeños para que quepan en 1–2 líneas (también con letra grande del sistema) */
+  @media (max-width:600px){ .content .section h1{font-size:clamp(20px, 5.6vw, 24px); line-height:1.2; margin-bottom:.35em;} }
   .lede{font-size:16.5px; color:var(--ink-soft);}
 
   .card{
