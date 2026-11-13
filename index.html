@@ -8636,7 +8636,7 @@ var ALL=[
  {mob:1,t:'<b>Toca las tablas</b> para verlas ampliadas a pantalla completa.',pre:function(){closeSb();goTo('.table-tap-hint');},tap:1,el:function(){var h=activeSel('.table-tap-hint');return h?h.parentElement:null;}},
  {t:'Si lo necesitas, <b>puedes imprimir o generar un PDF</b> con lo que has marcado.',pre:function(){closeSb();goTo('.print-summary-btn');},tap:1,el:function(){return activeSel('.print-summary-btn')||$('.section.active h1');}},
  {t:'En <b>“Consultar PDF”</b> está el documento original completo del protocolo.',pre:function(){openSb();},tap:1,el:function(){var b=document.querySelector('button[data-protocol="'+P+'"][data-section^="pdf"]');return b;}},
- {inst:1,t:'Recuerda: puedes <b>instalarla como app</b> en el móvil o el ordenador con <b>“📲 Instalar app”</b>, en la pantalla de inicio. Se abre como una aplicación más y funciona <b>sin conexión</b>.',pre:function(){closeSb();var h=$('#backToWelcome');if($('#shell').style.display!=='none'&&h)h.click();window.scrollTo(0,0);},tap:1,el:function(){var b=$('#installOpenBtn');return b&&vis(b)?b:null;}},
+ {inst:1,t:'Recuerda: puedes <b>instalarla como app</b> en el móvil o el ordenador con <b>“📲 Instalar app”</b>, en la pantalla de inicio. Se abre como una aplicación más y funciona <b>sin conexión</b>, aunque así no recibe las actualizaciones: se ponen al día en cuanto vuelves a tener conexión.',pre:function(){closeSb();var h=$('#backToWelcome');if($('#shell').style.display!=='none'&&h)h.click();window.scrollTo(0,0);},tap:1,el:function(){var b=$('#installOpenBtn');return b&&vis(b)?b:null;}},
 ];
 function draw(r,y,th,pad){
  var W=innerWidth,tw=txt.offsetWidth,tl=(W-tw)/2,below=y>r.top;
