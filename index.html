@@ -912,9 +912,12 @@
   .comment-text[contenteditable=true]{outline:none; cursor:text;}
   .comment-text[contenteditable=true]:focus{border-color:var(--teal); box-shadow:0 0 0 2px rgba(47,122,120,.18);}
   #commentModal .modal-actions{flex-wrap:wrap;}
-  @media (max-width:600px){ #commentModal .modal-actions button{flex:1 1 auto;} #commentModal #commentCopy{flex-basis:100%; order:-1; text-align:center;} }
+  @media (max-width:600px){ #commentModal .modal-actions button{flex:1 1 auto; text-align:center;} #commentModal #commentCopy{flex-basis:100%; order:-1; text-align:center;} }
   .gen-comment-btn.is-off{color:var(--ink-soft); border-color:var(--line); opacity:.6; cursor:not-allowed;}
   .gen-comment-btn.is-off:hover{background:transparent;}
+  .comment-head{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:4px;}
+  .comment-head h3{margin:0;}
+  .comment-head .beta-badge{margin:0; flex:none;}
   .beta-badge{display:inline-block; margin:0 0 8px; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7a4a00; background:#FBE3B0; border:1px solid #E8B93F; border-radius:999px; padding:2px 10px;}
   @media screen and (prefers-color-scheme: dark){.beta-badge{color:#FBE3B0; background:#4a3510; border-color:#9c7420;}}
 /* ==== MODO OSCURO (auto) ==== */
@@ -5395,8 +5398,7 @@
 
 <div class="modal-overlay" id="commentModal" role="dialog" aria-modal="true" aria-label="Comentario generado">
   <div class="modal-box comment-box">
-    <span class="beta-badge">Beta</span>
-    <h3>📝 Comentario</h3>
+    <div class="comment-head"><h3>📝 Comentario</h3><span class="beta-badge">Beta</span></div>
     <p class="modal-sub">Redactado a partir de los criterios marcados. Revísalo y adáptalo antes de incorporarlo al informe o nota clínica.</p>
     <div class="comment-opts" id="commentOpts" hidden>
       <div class="cm-row"><label class="cm-lab" for="cmEdad">Edad</label><input type="text" inputmode="numeric" id="cmEdad" maxlength="3" placeholder="años" autocomplete="off">
