@@ -6324,6 +6324,16 @@
       row.addEventListener('click', ()=>{
         row.classList.toggle('picked');
         update();
+        // al rellenar la escala, el criterio de inclusión «CURB-65 bajo» se marca solo si la puntuación es 0–1 (y se desmarca si es ≥ 2)
+        const cb = document.getElementById('ni2');
+        if(cb){
+          const total = parseInt(numEl.textContent, 10);
+          const want = total <= 1;
+          if(cb.checked !== want){
+            cb.checked = want;
+            cb.dispatchEvent(new Event('change', {bubbles:true}));
+          }
+        }
       });
     });
     window.updateCurb = update;
