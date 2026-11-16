@@ -213,6 +213,40 @@
   /* móvil: títulos de pestaña más pequeños para que quepan en 1–2 líneas (también con letra grande del sistema) */
   @media (max-width:600px){ .content .section h1{font-size:clamp(20px, 5.6vw, 24px); line-height:1.2; margin-bottom:.35em;} }
   .lede{font-size:16.5px; color:var(--ink-soft);}
+  @media (max-width:600px){ .content .section .lede{font-size:14.5px; line-height:1.4;} }
+  /* ---- Herramienta FiO₂ según interfase ---- */
+  .fio2-open{display:inline-block; margin-top:6px; padding:7px 12px; border:1.5px solid var(--teal); border-radius:999px; background:#fff; color:var(--teal-dark); font:inherit; font-size:14px; font-weight:700; cursor:pointer;}
+  #fio2Modal .modal-box{width:min(520px,94vw); padding:18px 18px 20px; max-height:92vh;}
+  #fio2Modal .gbs-img-title{font-size:18px; font-family:var(--serif); margin-bottom:4px;}
+  .fio2-devs{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:12px 0;}
+  .fio2-devs button{min-height:46px; padding:6px 4px; border-radius:10px; border:2px solid var(--line); background:#fff; color:var(--ink); font:inherit; font-size:13px; font-weight:700; line-height:1.15; cursor:pointer;}
+  .fio2-devs button.on{border-color:var(--teal); background:#E3F0EF;}
+  .fio2-fig{border:1px solid var(--line); border-radius:12px; padding:10px 12px; text-align:center;}
+  .fio2-fig-head{display:flex; justify-content:space-between; align-items:center; gap:8px; text-align:left;}
+  .fio2-fig-head strong{font-size:15.5px; color:#16324F;}
+  .fio2-fig-head span{font-size:12px; font-weight:600; padding:3px 10px; border-radius:999px; background:#EEEAE0; color:#3B5468; white-space:nowrap;}
+  .fio2-fig svg{width:min(180px,50vw); height:auto; display:block; margin:0 auto;}
+  .fio2-ctrl{border:1px solid var(--line); border-radius:12px; padding:12px; margin-top:10px;}
+  .fio2-ctrl-t{font-size:13px; font-weight:700; color:var(--ink-soft); margin-bottom:8px;}
+  .fio2-opts{display:flex; flex-wrap:wrap; gap:8px;}
+  .fio2-opts button{min-height:44px; min-width:50px; padding:4px 10px; border-radius:10px; border:2px solid var(--line); background:#fff; color:var(--ink); font:inherit; font-size:15px; font-weight:700; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:1.15;}
+  .fio2-opts button small{font-size:11px; font-weight:600; opacity:.85;}
+  .fio2-opts button.on{border-color:var(--teal-dark); background:var(--teal-dark); color:#fff;}
+  .fio2-opts .fio2-sep{flex-basis:100%; font-size:12px; font-weight:700; color:var(--ink-soft); display:flex; align-items:center; gap:6px;}
+  .fio2-sw{display:inline-block; width:22px; height:11px; border-radius:4px; border:1.5px solid #16324F;}
+  #fio2Range{width:100%; height:40px; margin:0; accent-color:var(--teal);}
+  .fio2-hint{font-size:13px; line-height:1.4; color:var(--ink-soft); margin:8px 0 0;}
+  .fio2-res{border:2px solid var(--ink); border-radius:12px; padding:12px 14px; margin-top:10px;}
+  .fio2-res-t{font-size:13px; font-weight:700; color:var(--ink-soft); display:flex; justify-content:space-between; gap:8px;}
+  .fio2-num{font-family:var(--serif); font-size:46px; line-height:1.05; font-weight:700; color:var(--ink);}
+  .fio2-num small{font-size:22px;}
+  .fio2-bar{position:relative; height:12px; border-radius:6px; background:#EEEAE0; overflow:hidden; margin-top:6px;}
+  .fio2-bar i{position:absolute; left:0; top:0; bottom:0; border-radius:6px; background:var(--low);}
+  .fio2-bar i.mid{background:var(--mid);} .fio2-bar i.high{background:var(--high);}
+  .fio2-scale{display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-soft); margin-top:3px;}
+  .fio2-note{border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-size:13.5px; line-height:1.4; margin-top:10px; color:var(--ink);}
+  .fio2-note.warn{background:var(--mid-bg); border-color:#f0dcae;}
+  #fio2ToPafi{width:100%; min-height:46px; margin-top:10px; border:0; border-radius:10px; background:var(--teal); color:#fff; font:inherit; font-size:15px; font-weight:700; cursor:pointer;}
 
   .card{
     background:var(--paper-raised);
@@ -966,6 +1000,20 @@
 @media screen and (prefers-color-scheme: dark){.pager-btn:hover{background:rgba(24,105,116,.16);}}
 @media screen and (prefers-color-scheme: dark) and (max-width:900px){.section-pager.pager-floating{background:rgba(33,33,33,0.85);}}
 @media screen and (prefers-color-scheme: dark) and (max-width:900px){.section-pager.pager-floating .pager-btn{background:transparent;}}
+@media screen and (prefers-color-scheme: dark){.fio2-open{background:var(--paper-raised);}}
+@media screen and (prefers-color-scheme: dark){.fio2-devs button{background:var(--paper-raised);}}
+@media screen and (prefers-color-scheme: dark){.fio2-devs button.on{background:#1e3937;}}
+@media screen and (prefers-color-scheme: dark){.fio2-fig-head strong{color:#97bce2;}}
+@media screen and (prefers-color-scheme: dark){.fio2-fig-head span{background:#39321f;color:#9fc0db;}}
+@media screen and (prefers-color-scheme: dark){.fio2-opts button{background:var(--paper-raised);}}
+@media screen and (prefers-color-scheme: dark){.fio2-opts button.on{background:#2f7a78;}}
+@media screen and (prefers-color-scheme: dark){.fio2-res{border:2px solid #0f1c29;}}
+@media screen and (prefers-color-scheme: dark){.fio2-bar{background:#39321f;}}
+@media screen and (prefers-color-scheme: dark){.fio2-bar i{background:#3f8f5f;}}
+@media screen and (prefers-color-scheme: dark){.fio2-bar i.mid{background:#a8741f;}}
+@media screen and (prefers-color-scheme: dark){.fio2-bar i.high{background:#b7472a;}}
+@media screen and (prefers-color-scheme: dark){.fio2-note.warn{background:var(--mid-bg);border-color:#725e31;}}
+@media screen and (prefers-color-scheme: dark){#fio2ToPafi{background:var(--teal);}}
 @media screen and (prefers-color-scheme: dark){.card{background:var(--paper-raised);}}
 @media screen and (prefers-color-scheme: dark){.checklist li{border-bottom:1px solid #6c5a38;}}
 @media screen and (prefers-color-scheme: dark){.checklist-toggle-btn{background:rgba(24,105,116,.08);}}
@@ -1087,6 +1135,19 @@
 @media screen and (prefers-color-scheme: dark){.install-open-btn:hover{background:#1f3633;}}
 @media screen and (prefers-color-scheme: dark){.install-tabs button{background:transparent;}}
 @media screen and (prefers-color-scheme: dark){.install-tabs button.on{background:var(--teal);}}
+@media screen and (prefers-color-scheme: dark){.move-notice{background:#B7472A;}}
+@media screen and (prefers-color-scheme: dark){.move-notice a.mn-go{background:var(--paper-raised);color:#eca18d;}}
+@media screen and (prefers-color-scheme: dark){.move-notice .mn-x{background:transparent;}}
+@media screen and (prefers-color-scheme: dark){.gen-comment-btn{background:transparent;}}
+@media screen and (prefers-color-scheme: dark){.gen-comment-btn:hover{background:rgba(47,122,120,.08);}}
+@media screen and (prefers-color-scheme: dark){.comment-text{background:var(--paper);}}
+@media screen and (prefers-color-scheme: dark){.comment-opts #cmEdad{background:var(--paper);}}
+@media screen and (prefers-color-scheme: dark){.comment-opts .cm-seg button{background:transparent;}}
+@media screen and (prefers-color-scheme: dark){.comment-opts .cm-seg button.on{background:var(--teal);}}
+@media screen and (prefers-color-scheme: dark){.comment-opts textarea{background:var(--paper);}}
+@media screen and (prefers-color-scheme: dark){.gen-comment-btn.is-off:hover{background:transparent;}}
+@media screen and (prefers-color-scheme: dark){.beta-badge{color:#eec78b;background:#493918;border:1px solid #726031;}}
+@media screen and (prefers-color-scheme: dark) and screen and (prefers-color-scheme: dark){.beta-badge{background:#4a3510;}}
 /* ==== FIN MODO OSCURO ==== */
 </style>
 </head>
@@ -1997,7 +2058,7 @@
           <ul>
             <li><strong>Broncodilatadores:</strong> SABA — salbutamol 400–600 mcg/4-6h; SAMA — ipratropio 80–120 mcg/4-6h</li>
             <li><strong>Corticoides sistémicos:</strong> 0,5 mg/kg/día de prednisona o equivalente; metilprednisolona 20–40 mg/8h ev</li>
-            <li><strong>Oxigenoterapia:</strong> la mínima necesaria para evitar hipoxemia; saturación objetivo 88–92%. Comprobar el equilibrio ácido-base con gasometría tras instaurarla</li>
+            <li><strong>Oxigenoterapia:</strong> la mínima necesaria para evitar hipoxemia; saturación objetivo 88–92%. Comprobar el equilibrio ácido-base con gasometría tras instaurarla <br><button type="button" class="fio2-open" data-fio2-target="SpO₂ 88–92 % (la mínima FiO₂ necesaria)" data-fio2-pafi="1">🫁 FiO₂ según interfase</button></li>
             <li><strong>Profilaxis de ETV:</strong> HBPM o anticoagulantes en pacientes de riesgo e inmovilizados</li>
             <li>Optimización de comorbilidades preexistentes</li>
           </ul>
@@ -2290,7 +2351,7 @@
         <h1>Tratamiento</h1>
         <div class="card section-block">
           <ul>
-            <li><strong>Oxígeno:</strong> &lt; 40% si saturación &lt; 92%</li>
+            <li><strong>Oxígeno:</strong> &lt; 40% si saturación &lt; 92% <br><button type="button" class="fio2-open" data-fio2-target="FiO₂ < 40 % si SpO₂ < 92 %">🫁 FiO₂ según interfase</button></li>
             <li><strong>Salbutamol + ipratropio:</strong> pMDI + cámara, 4–8 inhalaciones cada 4 horas</li>
             <li><strong>Corticoides:</strong> hidrocortisona ev 100–200 mg/6h, o metilprednisolona 20–40 mg/8h ev, o prednisona 20–40 mg vo/12h</li>
             <li><strong>Medidas generales</strong> adaptadas de forma individual a cada paciente según precise</li>
@@ -4041,7 +4102,7 @@
           <h3>Medidas generales</h3>
           <ul style="margin-bottom:0;">
             <li>Canalización de vía venosa periférica</li>
-            <li>Oxigenoterapia si insuficiencia respiratoria, con soporte necesario para conseguir SpO₂ &gt; 92% (objetivo 88–92% si el paciente tiene diagnóstico de EPOC)</li>
+            <li>Oxigenoterapia si insuficiencia respiratoria, con soporte necesario para conseguir SpO₂ &gt; 92% (objetivo 88–92% si el paciente tiene diagnóstico de EPOC) <br><button type="button" class="fio2-open" data-fio2-target="SpO₂ > 92 % (88–92 % si EPOC)">🫁 FiO₂ según interfase</button></li>
             <li>Antitérmicos si Tª &gt; 38ºC</li>
           </ul>
         <span class="block-drag-handle" title="Arrastrar para reordenar este recuadro" aria-hidden="true">☰</span></div>
@@ -5040,7 +5101,7 @@
 
         <div class="card section-block"><h3>Objetivo general</h3><p style="margin:0;">Estabilización y mejora de pacientes con descompensación aguda leve-moderada de IC en los que persisten síntomas/signos que no permiten alta directa desde SUH; mediante un tratamiento estandarizado y un control evolutivo de &gt;24 h.</p><span class="block-drag-handle" title="Arrastrar para reordenar este recuadro" aria-hidden="true">☰</span></div>
         <div class="card section-block"><h3>Objetivo secundario</h3><p style="margin:0;">Crear un protocolo de tratamiento y control para los pacientes con IC agudizada que no cumplen criterios de hospitalización, de manera multidisciplinar entre UOME del SUH, HAD y CAR.</p><span class="block-drag-handle" title="Arrastrar para reordenar este recuadro" aria-hidden="true">☰</span></div>
-        <div id="ic-status" class="status-banner status-banner-criteria status-neutral" data-inc="ic-inc" data-exc="ic-exc" data-mode="all">Marca los criterios para ver la recomendación.</div>
+        <div id="ic-status" class="status-banner status-banner-criteria status-neutral" data-inc="ic-inc" data-exc="ic-exc" data-mode="all" data-inc-strict="true">Marca los criterios para ver la recomendación.</div>
         <div class="gen-comment-row"><button type="button" class="gen-comment-btn is-off" aria-disabled="true" title="No disponible todavía en este protocolo">📝 Generar comentario</button></div>
         <div class="card section-block"><span class="group-title include">Criterios de inclusión — IC conocida (o probable) descompensada con:</span><div class="checklist-toggle-row"><button type="button" class="checklist-toggle-btn">Seleccionar todo</button></div><ul class="checklist" data-group="ic-inc"><li><input type="checkbox" id="nk12"><label for="nk12">Persistencia de la clínica de congestión.</label></li><li><input type="checkbox" id="nk13"><label for="nk13">Disnea leve-moderada (NYHA &lt; IV) que no precise VMNI.</label></li><li><input type="checkbox" id="nk14"><label for="nk14">Hipoxemia que no precise VMNI.</label></li><li><input type="checkbox" id="nk15"><label for="nk15">Necesidad de tratamiento IV.</label></li><li><input type="checkbox" id="nk16"><label for="nk16">Plan terapéutico claro.</label></li></ul><span class="block-drag-handle" title="Arrastrar para reordenar este recuadro" aria-hidden="true">☰</span></div>
         <div class="card section-block"><span class="group-title exclude">Criterios de exclusión</span><ul class="checklist" data-group="ic-exc" data-any-of="true"><li><input type="checkbox" id="nk17"><label for="nk17">Disnea en reposo NYHA IV.</label></li><li><input type="checkbox" id="nk18"><label for="nk18">Hipoxemia clínica relevante = insuficiencia respiratoria.</label></li><li><input type="checkbox" id="nk19"><label for="nk19">Necesidad de VMNI.</label></li><li><input type="checkbox" id="nk20"><label for="nk20">Inestabilidad hemodinámica, shock o hipotensión.</label></li><li><input type="checkbox" id="nk21"><label for="nk21">Necesidad de inotrópicos/vasopresores.</label></li><li><input type="checkbox" id="nk22"><label for="nk22">Edema agudo grave.</label></li><li><input type="checkbox" id="nk23"><label for="nk23">Arritmia grave (descompensa enfermedades de base, inestabilidad).</label></li></ul><span class="block-drag-handle" title="Arrastrar para reordenar este recuadro" aria-hidden="true">☰</span></div>
@@ -5062,7 +5123,7 @@
         <h1>Tratamiento</h1>
         
 
-        <div class="card section-block"><h3>Oxigenoterapia</h3><p style="margin-bottom:6px;">Si Sat &lt; 90 % o PaO₂ &lt; 60 mmHg. Evitar oxígeno rutinario.</p><span class="block-drag-handle" title="Arrastrar para reordenar este recuadro" aria-hidden="true">☰</span></div>
+        <div class="card section-block"><h3>Oxigenoterapia</h3><p style="margin-bottom:6px;">Si Sat &lt; 90 % o PaO₂ &lt; 60 mmHg. Evitar oxígeno rutinario. <br><button type="button" class="fio2-open" data-fio2-target="oxígeno solo si Sat < 90 % o PaO₂ < 60 mmHg">🫁 FiO₂ según interfase</button></p><span class="block-drag-handle" title="Arrastrar para reordenar este recuadro" aria-hidden="true">☰</span></div>
         <div class="card section-block"><h3>Diuréticos</h3><p style="margin-bottom:6px;">Objetivo: aliviar la congestión y alcanzar euvolemia; evitar el alta con congestión residual.</p><span class="group-title sub-gt">Furosemida IV</span><ul style="margin-bottom:0;"><li><strong>Pacientes naive:</strong> 20–40 mg IV.</li><li><strong>Pacientes previamente tratados:</strong> de 1 a 2,5 veces la dosis total domiciliaria IV (independientemente de la TA).</li><li><strong>Objetivo:</strong> diuresis &gt; 100–150 ml/h las primeras horas y balance negativo.</li></ul><span class="group-title sub-gt">Monitorización del tratamiento</span><ul style="margin-bottom:0;"><li>Registrar balance hídrico + analítica de control con iones en orina a las 6 h.</li><li><strong>Respuesta satisfactoria:</strong> contenido de Na⁺ en orina &gt; 70 mEq/l a las 2 h, o diuresis &gt; 600–900 ml durante las primeras 6 h.</li><li><strong>Respuesta insuficiente</strong> → ingreso.</li></ul><span class="block-drag-handle" title="Arrastrar para reordenar este recuadro" aria-hidden="true">☰</span></div>
         <div class="card section-block"><h3>Hierro carboximaltosa IV</h3><p style="margin-bottom:6px;"><strong>Solo si</strong> ferritina &lt; 100 ng/ml, o 100–299 ng/ml + saturación de transferrina &lt; 20 %.</p><ul style="margin-bottom:0;"><li>L–V en horario laboral: actuar según resultado.</li><li>L–V tardes/noches o fines de semana: dejar solicitud, imprimir volante de solicitud previa de BQ y añadir a mano la solicitud de hierro; comunicar a Laboratorio.</li></ul><span class="block-drag-handle" title="Arrastrar para reordenar este recuadro" aria-hidden="true">☰</span></div>
       </section>
@@ -5329,6 +5390,23 @@
     <p class="gbs-foot">Los grados 1–4 coinciden con la escala MRC de disnea clásica; la eMRCD divide el grado 5 según la capacidad de realizar el aseo y el vestido. En el índice DECAF: grados 1–4 = 0 puntos; 5a = 1 punto; 5b = 2 puntos. Descripciones traducidas del original en inglés.</p>
     <p class="gbs-foot gbs-ref-cite"><strong>Fuente:</strong> Steer J, Norman EM, Afolabi OA, Gibson GJ, Bourke SC. Dyspnoea severity and pneumonia as predictors of in-hospital mortality and early readmission in acute exacerbations of COPD. Thorax. 2012;67(2):117-121. doi:10.1136/thoraxjnl-2011-200332.</p>
     <div class="modal-actions"><button class="secondary" type="button" id="emrcdClose">Cerrar</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="fio2Modal" role="dialog" aria-modal="true" aria-label="FiO₂ según la interfase">
+  <div class="modal-box">
+    <p class="gbs-img-title">FiO₂ según la interfase</p>
+    <p class="modal-sub" style="text-align:center;">Elige el dispositivo y el flujo. Valores orientativos.</p>
+    <div class="fio2-devs" id="fio2Devs"></div>
+    <div class="fio2-fig" style="background:#FBFAF6;"><div class="fio2-fig-head"><strong id="fio2Name" style="color:#16324F;"></strong><span id="fio2Kind" style="background:#EEEAE0; color:#3B5468;"></span></div><div id="fio2Svg"></div></div>
+    <div class="fio2-ctrl"><div class="fio2-ctrl-t" id="fio2CtrlT"></div><div class="fio2-opts" id="fio2Opts"></div><input type="range" id="fio2Range" min="21" max="100" step="1" aria-label="FiO₂ programada"><p class="fio2-hint" id="fio2Hint"></p></div>
+    <div class="fio2-res"><div class="fio2-res-t"><span>FiO₂ aproximada</span><span id="fio2Prec"></span></div><div class="fio2-num"><span id="fio2Num">28</span> <small>%</small></div><div class="fio2-bar"><i id="fio2Bar"></i></div><div class="fio2-scale"><span>21 (aire)</span><span>40</span><span>60</span><span>100</span></div></div>
+    <div class="fio2-note warn" id="fio2Target"></div>
+    <div class="fio2-note" id="fio2Warn"></div>
+    <button type="button" id="fio2ToPafi">Usar en la calculadora PaFi</button>
+    <p class="gbs-foot">En bajo flujo la FiO₂ real cambia con el patrón respiratorio. El flujo de cada adaptador Venturi puede variar según el fabricante: usar el impreso en el dispositivo.</p>
+    <p class="gbs-foot gbs-ref-cite"><strong>Fuente:</strong> O’Driscoll BR, et al. BTS guideline for oxygen use in adults in healthcare and emergency settings. Thorax. 2017;72(Suppl 1):i1-i90. Masclans JR, et al. Papel de la oxigenoterapia de alto flujo en la insuficiencia respiratoria aguda. Med Intensiva. 2015;39(8):505-515.</p>
+    <div class="modal-actions"><button class="secondary" type="button" id="fio2Close">Cerrar</button></div>
   </div>
 </div>
 
@@ -7897,6 +7975,68 @@
     document.getElementById('emrcdClose').addEventListener('click',close);
     ov.addEventListener('click',e=>{ if(e.target===ov) close(); });
     document.addEventListener('keydown',e=>{ if(e.key==='Escape') close(); });
+  })();
+
+  // ---- Herramienta FiO₂ según interfase ----
+  (function(){
+    const M=document.getElementById('fio2Modal'); if(!M) return;
+    const SVG={"nasal": "<path d=\"M78 270 C80 240 74 222 70 204 C44 194 34 156 40 120 C46 74 82 34 128 34 C168 34 192 66 192 102 C192 112 193 118 196 128 L214 158 C217 164 213 170 205 170 L203 180 C208 181 209 188 203 190 C207 195 205 200 199 202 C201 212 196 220 188 224 C176 230 158 228 148 232 L148 270 Z\" fill=\"#F3E7D8\" stroke=\"#16324F\" stroke-width=\"2.4\" stroke-linejoin=\"round\"/>\n<path d=\"M108 120 C96 116 92 132 98 146 C102 154 110 154 112 146\" fill=\"none\" stroke=\"#16324F\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n<circle cx=\"180\" cy=\"116\" r=\"2.4\" fill=\"#16324F\"/><path d=\"M196 172 C176 176 160 170 144 154 C128 138 116 124 112 110 C108 102 98 104 96 116 C94 150 100 200 128 226 C140 238 134 258 124 270\" fill=\"none\" stroke=\"#2F7A78\" stroke-width=\"4.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M196 172 L201 160\" stroke=\"#2F7A78\" stroke-width=\"5\" stroke-linecap=\"round\" fill=\"none\"/><path d=\"M190 173 L194 163\" stroke=\"#2F7A78\" stroke-width=\"4\" stroke-linecap=\"round\" fill=\"none\"/>", "simple": "<path d=\"M78 270 C80 240 74 222 70 204 C44 194 34 156 40 120 C46 74 82 34 128 34 C168 34 192 66 192 102 C192 112 193 118 196 128 L214 158 C217 164 213 170 205 170 L203 180 C208 181 209 188 203 190 C207 195 205 200 199 202 C201 212 196 220 188 224 C176 230 158 228 148 232 L148 270 Z\" fill=\"#F3E7D8\" stroke=\"#16324F\" stroke-width=\"2.4\" stroke-linejoin=\"round\"/>\n<path d=\"M108 120 C96 116 92 132 98 146 C102 154 110 154 112 146\" fill=\"none\" stroke=\"#16324F\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n<circle cx=\"180\" cy=\"116\" r=\"2.4\" fill=\"#16324F\"/><path d=\"M194 118 C228 128 240 158 230 184 C224 204 206 218 184 218 C178 218 174 215 172 211 C184 196 192 168 194 118 Z\" fill=\"rgba(255,255,255,.62)\" stroke=\"#2F7A78\" stroke-width=\"3.2\" stroke-linejoin=\"round\"/>\n<circle cx=\"222\" cy=\"162\" r=\"2.4\" fill=\"#2F7A78\"/><circle cx=\"216\" cy=\"172\" r=\"2.4\" fill=\"#2F7A78\"/><circle cx=\"224\" cy=\"174\" r=\"2.4\" fill=\"#2F7A78\"/>\n<path d=\"M178 152 C150 146 112 146 72 160\" fill=\"none\" stroke=\"#7FB5B3\" stroke-width=\"5\" stroke-linecap=\"round\"/><path d=\"M200 218 C206 240 198 256 182 270\" fill=\"none\" stroke=\"#2F7A78\" stroke-width=\"5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>", "venturi": "<path d=\"M78 270 C80 240 74 222 70 204 C44 194 34 156 40 120 C46 74 82 34 128 34 C168 34 192 66 192 102 C192 112 193 118 196 128 L214 158 C217 164 213 170 205 170 L203 180 C208 181 209 188 203 190 C207 195 205 200 199 202 C201 212 196 220 188 224 C176 230 158 228 148 232 L148 270 Z\" fill=\"#F3E7D8\" stroke=\"#16324F\" stroke-width=\"2.4\" stroke-linejoin=\"round\"/>\n<path d=\"M108 120 C96 116 92 132 98 146 C102 154 110 154 112 146\" fill=\"none\" stroke=\"#16324F\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n<circle cx=\"180\" cy=\"116\" r=\"2.4\" fill=\"#16324F\"/><path d=\"M194 118 C228 128 240 158 230 184 C224 204 206 218 184 218 C178 218 174 215 172 211 C184 196 192 168 194 118 Z\" fill=\"rgba(255,255,255,.62)\" stroke=\"#2F7A78\" stroke-width=\"3.2\" stroke-linejoin=\"round\"/>\n<circle cx=\"222\" cy=\"162\" r=\"2.4\" fill=\"#2F7A78\"/><circle cx=\"216\" cy=\"172\" r=\"2.4\" fill=\"#2F7A78\"/><circle cx=\"224\" cy=\"174\" r=\"2.4\" fill=\"#2F7A78\"/>\n<path d=\"M178 152 C150 146 112 146 72 160\" fill=\"none\" stroke=\"#7FB5B3\" stroke-width=\"5\" stroke-linecap=\"round\"/><rect x=\"204\" y=\"206\" width=\"26\" height=\"24\" rx=\"5\" fill=\"var(--fio2-adp,#4FA36B)\" stroke=\"#16324F\" stroke-width=\"2.4\"/><path d=\"M211 214 H223 M211 222 H223\" stroke=\"#16324F\" stroke-width=\"2\" stroke-linecap=\"round\"/><path d=\"M243 208 L233 214 M243 226 L233 220\" stroke=\"#16324F\" stroke-width=\"2\" stroke-linecap=\"round\" fill=\"none\"/><path d=\"M233 214 l5 -1 M233 214 l2 4 M233 220 l5 1 M233 220 l2 -4\" stroke=\"#16324F\" stroke-width=\"2\" stroke-linecap=\"round\"/><path d=\"M217 230 C217 248 205 260 192 270\" fill=\"none\" stroke=\"#2F7A78\" stroke-width=\"5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>", "reserv": "<path d=\"M78 270 C80 240 74 222 70 204 C44 194 34 156 40 120 C46 74 82 34 128 34 C168 34 192 66 192 102 C192 112 193 118 196 128 L214 158 C217 164 213 170 205 170 L203 180 C208 181 209 188 203 190 C207 195 205 200 199 202 C201 212 196 220 188 224 C176 230 158 228 148 232 L148 270 Z\" fill=\"#F3E7D8\" stroke=\"#16324F\" stroke-width=\"2.4\" stroke-linejoin=\"round\"/>\n<path d=\"M108 120 C96 116 92 132 98 146 C102 154 110 154 112 146\" fill=\"none\" stroke=\"#16324F\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n<circle cx=\"180\" cy=\"116\" r=\"2.4\" fill=\"#16324F\"/><path d=\"M194 118 C228 128 240 158 230 184 C224 204 206 218 184 218 C178 218 174 215 172 211 C184 196 192 168 194 118 Z\" fill=\"rgba(255,255,255,.62)\" stroke=\"#2F7A78\" stroke-width=\"3.2\" stroke-linejoin=\"round\"/>\n<circle cx=\"222\" cy=\"162\" r=\"2.4\" fill=\"#2F7A78\"/><circle cx=\"216\" cy=\"172\" r=\"2.4\" fill=\"#2F7A78\"/><circle cx=\"224\" cy=\"174\" r=\"2.4\" fill=\"#2F7A78\"/>\n<path d=\"M178 152 C150 146 112 146 72 160\" fill=\"none\" stroke=\"#7FB5B3\" stroke-width=\"5\" stroke-linecap=\"round\"/><circle cx=\"206\" cy=\"146\" r=\"7\" fill=\"#fff\" stroke=\"#2F7A78\" stroke-width=\"2.4\"/><path d=\"M203 146 h6\" stroke=\"#2F7A78\" stroke-width=\"2\"/><path d=\"M208 216 C240 218 258 242 246 264 C236 276 206 272 198 252 C192 238 196 222 208 216 Z\" fill=\"#DCEBEA\" stroke=\"#2F7A78\" stroke-width=\"3\" stroke-linejoin=\"round\"/><path d=\"M214 232 C222 230 232 236 236 246\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3\" stroke-linecap=\"round\"/>", "oaf": "<path d=\"M78 270 C80 240 74 222 70 204 C44 194 34 156 40 120 C46 74 82 34 128 34 C168 34 192 66 192 102 C192 112 193 118 196 128 L214 158 C217 164 213 170 205 170 L203 180 C208 181 209 188 203 190 C207 195 205 200 199 202 C201 212 196 220 188 224 C176 230 158 228 148 232 L148 270 Z\" fill=\"#F3E7D8\" stroke=\"#16324F\" stroke-width=\"2.4\" stroke-linejoin=\"round\"/>\n<path d=\"M108 120 C96 116 92 132 98 146 C102 154 110 154 112 146\" fill=\"none\" stroke=\"#16324F\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n<circle cx=\"180\" cy=\"116\" r=\"2.4\" fill=\"#16324F\"/><path d=\"M72 232 C112 250 156 236 182 190 C190 182 196 178 198 174\" fill=\"none\" stroke=\"#2F7A78\" stroke-width=\"9\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M72 232 C112 250 156 236 182 190 C190 182 196 178 198 174\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-dasharray=\"1 7\" stroke-linejoin=\"round\"/><path d=\"M196 176 L202 160\" stroke=\"#2F7A78\" stroke-width=\"8\" stroke-linecap=\"round\" fill=\"none\"/><path d=\"M186 178 L191 165\" stroke=\"#2F7A78\" stroke-width=\"6\" stroke-linecap=\"round\" fill=\"none\"/><rect x=\"8\" y=\"208\" width=\"66\" height=\"58\" rx=\"9\" fill=\"#EAF2F1\" stroke=\"#16324F\" stroke-width=\"2.4\"/><rect x=\"16\" y=\"216\" width=\"38\" height=\"20\" rx=\"3\" fill=\"#fff\" stroke=\"#16324F\" stroke-width=\"1.8\"/><path d=\"M21 228 h8 l3 -6 l4 10 l3 -4 h5\" fill=\"none\" stroke=\"#2F7A78\" stroke-width=\"1.8\" stroke-linecap=\"round\"/><circle cx=\"60\" cy=\"226\" r=\"3.5\" fill=\"#2F7A78\"/><rect x=\"16\" y=\"244\" width=\"50\" height=\"14\" rx=\"4\" fill=\"#B9DAD8\" stroke=\"#16324F\" stroke-width=\"1.8\"/>", "niv": "<path d=\"M78 270 C80 240 74 222 70 204 C44 194 34 156 40 120 C46 74 82 34 128 34 C168 34 192 66 192 102 C192 112 193 118 196 128 L214 158 C217 164 213 170 205 170 L203 180 C208 181 209 188 203 190 C207 195 205 200 199 202 C201 212 196 220 188 224 C176 230 158 228 148 232 L148 270 Z\" fill=\"#F3E7D8\" stroke=\"#16324F\" stroke-width=\"2.4\" stroke-linejoin=\"round\"/>\n<path d=\"M108 120 C96 116 92 132 98 146 C102 154 110 154 112 146\" fill=\"none\" stroke=\"#16324F\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n<circle cx=\"180\" cy=\"116\" r=\"2.4\" fill=\"#16324F\"/><path d=\"M190 84 C160 62 104 62 56 96\" fill=\"none\" stroke=\"#7FB5B3\" stroke-width=\"5\" stroke-linecap=\"round\"/><path d=\"M178 154 C140 156 104 170 72 198\" fill=\"none\" stroke=\"#7FB5B3\" stroke-width=\"5\" stroke-linecap=\"round\"/><rect x=\"184\" y=\"78\" width=\"14\" height=\"30\" rx=\"6\" fill=\"#DCEBEA\" stroke=\"#2F7A78\" stroke-width=\"3\"/><path d=\"M196 118 C232 126 242 160 232 186 C226 206 208 220 184 220 C176 220 172 216 172 212 C186 198 194 168 196 118 Z\" fill=\"rgba(255,255,255,.72)\" stroke=\"#2F7A78\" stroke-width=\"4.2\" stroke-linejoin=\"round\"/><rect x=\"226\" y=\"154\" width=\"24\" height=\"26\" rx=\"6\" fill=\"#fff\" stroke=\"#2F7A78\" stroke-width=\"3\"/><circle cx=\"212\" cy=\"140\" r=\"2.4\" fill=\"#2F7A78\"/><circle cx=\"218\" cy=\"146\" r=\"2.4\" fill=\"#2F7A78\"/><circle cx=\"212\" cy=\"152\" r=\"2.4\" fill=\"#2F7A78\"/><path d=\"M250 170 C266 196 250 240 214 270\" fill=\"none\" stroke=\"#2F7A78\" stroke-width=\"8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M250 170 C266 196 250 240 214 270\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-dasharray=\"1 6\" stroke-linejoin=\"round\"/>", "head": "<path d=\"M78 270 C80 240 74 222 70 204 C44 194 34 156 40 120 C46 74 82 34 128 34 C168 34 192 66 192 102 C192 112 193 118 196 128 L214 158 C217 164 213 170 205 170 L203 180 C208 181 209 188 203 190 C207 195 205 200 199 202 C201 212 196 220 188 224 C176 230 158 228 148 232 L148 270 Z\" fill=\"#F3E7D8\" stroke=\"#16324F\" stroke-width=\"2.4\" stroke-linejoin=\"round\"/>\n<path d=\"M108 120 C96 116 92 132 98 146 C102 154 110 154 112 146\" fill=\"none\" stroke=\"#16324F\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n<circle cx=\"180\" cy=\"116\" r=\"2.4\" fill=\"#16324F\"/>"};
+    const $=id=>document.getElementById(id);
+    const DEVS=[['nasal','Gafas nasales','Bajo flujo'],['simple','Mascarilla simple','Bajo flujo'],['venturi','Venturi','FiO₂ fija'],['reserv','Reservorio','Alta concentración'],['oaf','Alto flujo','Cánula de alto flujo'],['niv','VMNI','Presión positiva']];
+    const T={nasal:{1:24,2:28,3:32,4:36,5:40,6:44},simple:{5:40,6:45,7:50,8:55,9:58,10:60},reserv:{10:60,11:65,12:70,13:75,14:80,15:85}};
+    const VEN=[[24,'3','v'],[26,'3','v'],[28,'6','v'],[30,'6','v'],[35,'8–9','b'],[40,'10–12','b'],[50,'15','b']];
+    const st={dev:'nasal',sel:{nasal:2,simple:7,venturi:28,reserv:12,oaf:50,niv:40},pafi:false,target:''};
+    function fio2(){ const d=st.dev; return T[d]?T[d][st.sel[d]]:st.sel[d]; }
+    function render(){
+      const d=st.dev, cur=DEVS.find(x=>x[0]===d), box=$('fio2Opts'), rng=$('fio2Range');
+      $('fio2Devs').innerHTML=DEVS.map(x=>'<button type="button" data-dev="'+x[0]+'"'+(x[0]===d?' class="on" aria-pressed="true"':' aria-pressed="false"')+'>'+x[1]+'</button>').join('');
+      $('fio2Name').textContent=cur[1]; $('fio2Kind').textContent=cur[2];
+      $('fio2Svg').innerHTML='<svg viewBox="4 20 268 260" role="img" aria-label="'+cur[1]+'">'+SVG[d]+'</svg>';
+      let title='',hint='',prec='',warn='',html='';
+      if(T[d]){
+        html=Object.keys(T[d]).map(k=>'<button type="button" data-v="'+k+'"'+(+k===st.sel[d]?' class="on"':'')+' aria-label="'+k+' litros por minuto">'+k+'</button>').join('');
+        title='Flujo de O₂ (L/min)'; prec='Variable (±)';
+        if(d==='nasal'){ hint='Rango habitual 1–4 L/min. Regla rápida: 21 % + 4 % por cada L/min.'; warn='Por encima de 4 L/min reseca la mucosa nasal y la FiO₂ real es menos fiable.'; }
+        if(d==='simple'){ hint='No usar por debajo de 5 L/min: riesgo de reinhalar CO₂.'; warn='FiO₂ poco precisa: depende de la frecuencia respiratoria y del ajuste de la mascarilla.'; }
+        if(d==='reserv'){ hint='Mantener 10–15 L/min y comprobar que la bolsa no se colapsa al inspirar.'; warn='Si necesita FiO₂ > 60 % de forma mantenida, valorar escalar el soporte (alto flujo o VMNI).'; }
+      } else if(d==='venturi'){
+        const v=VEN.find(x=>x[0]===st.sel.venturi), verde=v[2]==='v';
+        const grp=(c,lab,col)=>'<span class="fio2-sep"><span class="fio2-sw" style="background:'+col+'"></span>'+lab+'</span>'+VEN.filter(x=>x[2]===c).map(x=>'<button type="button" data-v="'+x[0]+'"'+(x[0]===st.sel.venturi?' class="on"':'')+' aria-label="'+x[0]+' por ciento, '+x[1]+' litros por minuto">'+x[0]+' %<small>'+x[1]+' L/min</small></button>').join('');
+        html=grp('v','Adaptador verde (24–30 %)','#4FA36B')+grp('b','Adaptador blanco (35–50 %)','#FFFFFF');
+        M.style.setProperty('--fio2-adp',verde?'#4FA36B':'#FFFFFF');
+        title='Adaptador regulable · % · flujo de O₂'; prec='Fija (± 1–2)';
+        hint='Adaptador '+(verde?'verde':'blanco')+' en '+v[0]+' % con '+v[1]+' L/min. Subir el flujo no sube la FiO₂: para eso hay que girar el regulador o cambiar de adaptador.';
+        warn='Interfase de elección cuando hay que ajustar la FiO₂ con precisión (riesgo de hipercapnia).';
+      } else {
+        prec='Programada';
+        if(d==='oaf'){ title='FiO₂ programada (flujo 30–60 L/min)'; hint='Gas calentado y humidificado. La FiO₂ (21–100 %) se fija en el equipo, independiente del flujo.'; warn='No sustituye a la VMNI si hay hipercapnia con acidosis.'; }
+        else { title='FiO₂ programada en el ventilador'; hint='La FiO₂ (21–100 %) se ajusta en el equipo junto con las presiones (IPAP/EPAP o CPAP). Si el O₂ se añade con caudalímetro al circuito, la FiO₂ real es variable.'; warn='Indicada si hay acidosis respiratoria o fracaso de la oxigenoterapia convencional.'; }
+      }
+      const slider=!T[d]&&d!=='venturi';
+      box.innerHTML=html; box.style.display=slider?'none':''; rng.style.display=slider?'':'none'; if(slider) rng.value=st.sel[d];
+      $('fio2CtrlT').textContent=title; $('fio2Hint').textContent=hint; $('fio2Prec').textContent=prec; $('fio2Warn').textContent=warn;
+      const f=fio2(); $('fio2Num').textContent=f;
+      const bar=$('fio2Bar'); bar.style.width=Math.max(2,(f-21)/79*100)+'%'; bar.className=f<=35?'':(f<=60?'mid':'high');
+      const tg=$('fio2Target'); tg.style.display=st.target?'':'none'; tg.innerHTML='<strong>Objetivo en este protocolo:</strong> '+st.target+'.';
+      const pb=$('fio2ToPafi'); pb.style.display=st.pafi?'':'none'; pb.textContent='Usar '+f+' % en la calculadora PaFi';
+    }
+    $('fio2Devs').addEventListener('click',e=>{ const b=e.target.closest('button[data-dev]'); if(b){ st.dev=b.dataset.dev; render(); } });
+    $('fio2Opts').addEventListener('click',e=>{ const b=e.target.closest('button[data-v]'); if(b){ st.sel[st.dev]=+b.dataset.v; render(); } });
+    $('fio2Range').addEventListener('input',e=>{ st.sel[st.dev]=+e.target.value; render(); });
+    const close=()=>M.classList.remove('open');
+    $('fio2Close').addEventListener('click',close);
+    M.addEventListener('click',e=>{ if(e.target===M) close(); });
+    document.addEventListener('keydown',e=>{ if(e.key==='Escape') close(); });
+    document.addEventListener('click',e=>{ const b=e.target.closest('.fio2-open'); if(!b) return; e.preventDefault();
+      st.target=b.dataset.fio2Target||''; st.pafi=b.dataset.fio2Pafi==='1'; render(); M.classList.add('open'); M.querySelector('.modal-box').scrollTop=0; });
+    $('fio2ToPafi').addEventListener('click',()=>{
+      const inp=$('pafiCalcFio2'); if(!inp) return; close();
+      const nav=document.querySelector('button[data-section="sec-epoc-evaluacion"],button[data-section="epoc-evaluacion"]');
+      if(nav && typeof activateNavButton==='function') activateNavButton(nav);
+      inp.value=fio2(); inp.dispatchEvent(new Event('input',{bubbles:true}));
+      setTimeout(()=>{ inp.scrollIntoView({block:'center'}); },80);
+    });
+    render();
   })();
 
   // ---- Escalas de consulta (mMRC, NYHA) ----
